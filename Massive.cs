@@ -241,22 +241,6 @@ namespace Massive {
 
         #region SQL Server Bulk Inserts - Should be in a SQL Server specific class
 
-        public static void BulkInsert(this DynamicModel model, IEnumerable<object> data) {
-            if (model == null || string.IsNullOrWhiteSpace(model.TableName)) {
-                throw new Exception("Model must point to valid underlying table for bulk inserts");
-            }
-            var dataTable = model.ToDataTable(data);
-            using (var con = DB.Current.OpenConnection()) {
-                if (con.State != ConnectionState.Open) {
-                    con.Open();
-                }
-                using (var bulkCopy = new SqlBulkCopy((SqlConnection)con)) {
-                    bulkCopy.DestinationTableName = model.TableName;
-                    bulkCopy.WriteToServer(dataTable);
-                }
-            }
-        }
-
         public static void BulkInsert(this DynamicModel model, IEnumerable<object> data)
         {
            if (model == null || string.IsNullOrWhiteSpace(model.TableName))
